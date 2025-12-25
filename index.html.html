@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Penghitung Member Depo</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-color: #1e293b;
+            --accent-blue: #38bdf8;
+            --red-low: #450a0a;
+            --red-border: #ef4444;
+            --green-low: #064e3b;
+            --green-border: #10b981;
+        }
+
+        body { 
+            font-family: 'Segoe UI', Roboto, sans-serif; 
+            background: var(--bg-color); 
+            color: white; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .card { 
+            background: var(--card-color); 
+            padding: 40px; 
+            border-radius: 24px; 
+            width: 100%; 
+            max-width: 900px; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6); 
+            border: 1px solid #334155;
+            position: relative;
+        }
+
+        h1 { 
+            text-align: center; 
+            color: var(--accent-blue); 
+            margin-bottom: 25px; 
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 26px;
+        }
+
+        textarea { 
+            width: 100%; 
+            height: 500px; 
+            background: #020617; 
+            color: var(--accent-blue); 
+            border: 2px solid #334155; 
+            border-radius: 16px; 
+            padding: 20px; 
+            box-sizing: border-box; 
+            resize: vertical; 
+            font-size: 18px; 
+            font-family: 'Consolas', monospace;
+            margin-bottom: 30px; 
+            outline: none;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .stats { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 25px; 
+        }
+
+        .stat-box { 
+            padding: 30px; 
+            border-radius: 20px; 
+            text-align: center; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .tidak-depo { background: var(--red-low); border: 2px solid var(--red-border); }
+        .sudah-depo { background: var(--green-low); border: 2px solid var(--green-border); }
+
+        .number { 
+            font-size: 65px; 
+            font-weight: 800; 
+            display: block; 
+            line-height: 1;
+            margin-bottom: 10px;
+        }
+
+        .label { 
+            font-size: 15px; 
+            font-weight: 600;
+            text-transform: uppercase;
+            opacity: 0.9;
+        }
+
+        .footer-info {
+            margin-top: 30px; 
+            text-align: center; 
+            font-size: 18px; 
+            color: #94a3b8;
+            padding-top: 20px;
+            border-top: 1px solid #334155;
+            letter-spacing: 1px;
+        }
+
+        .total-val {
+            color: var(--accent-blue);
+            font-weight: bold;
+            font-size: 24px;
+            margin-left: 10px;
+        }
+
+        /* STYLE NAMA PENCIPTA */
+        .creator {
+            margin-top: 25px;
+            text-align: center;
+            font-size: 12px;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-weight: bold;
+        }
+        
+        .creator span {
+            color: var(--accent-blue);
+            text-shadow: 0 0 8px rgba(56, 189, 248, 0.3);
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h1>PENGHITUNG MEMBER DEPO DAN TIDAK DEPO</h1>
+    
+    <textarea id="inputData" placeholder="Paste nominal saldo di sini..." oninput="hitungDepo()"></textarea>
+
+    <div class="stats">
+        <div class="stat-box tidak-depo">
+            <span class="label">MEMBER TIDAK DEPO (0,00)</span>
+            <span id="countZero" class="number">0</span>
+        </div>
+        <div class="stat-box sudah-depo">
+            <span class="label">MEMBER SUDAH DEPO</span>
+            <span id="countExist" class="number">0</span>
+        </div>
+    </div>
+    
+    <div class="footer-info">
+        TOTAL MEMBER: <span id="totalData" class="total-val">0</span>
+    </div>
+
+    <div class="creator">
+        Created by <span>ADSAWC</span>
+    </div>
+</div>
+
+<script>
+    function hitungDepo() {
+        const input = document.getElementById('inputData').value;
+        const zeroDisplay = document.getElementById('countZero');
+        const existDisplay = document.getElementById('countExist');
+        const totalDisplay = document.getElementById('totalData');
+
+        const regex = /\d{1,3}(?:\.\d{3})*,\d{2}/g;
+        const matches = input.match(regex);
+
+        if (!matches) {
+            zeroDisplay.innerText = "0";
+            existDisplay.innerText = "0";
+            totalDisplay.innerText = "0";
+            return;
+        }
+
+        let tidakDepo = 0;
+        let sudahDepo = 0;
+
+        matches.forEach(val => {
+            const nilaiMurni = parseFloat(val.replace(/\./g, '').replace(',', '.'));
+            if (nilaiMurni === 0) {
+                tidakDepo++;
+            } else {
+                sudahDepo++;
+            }
+        });
+
+        zeroDisplay.innerText = tidakDepo;
+        existDisplay.innerText = sudahDepo;
+        totalDisplay.innerText = matches.length;
+    }
+</script>
+
+</body>
+</html>
